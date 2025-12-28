@@ -1,0 +1,7 @@
+{
+  "name": "kxl v.0- Digital Rebuild Engine - design stage - antigravity merge #1",
+  "description": "Next-generation digital lab focused on upgrading brands, systems, and technology stacks with a high-end glassmorphic aesthetic.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

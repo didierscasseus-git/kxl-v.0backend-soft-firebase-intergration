@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  --font-antonio: "Antonio", sans-serif;
+}
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f8fa;
+    --bg-secondary-rgb: 246, 248, 250;
+    --border-primary: #d0d7de;
+    --text-primary: #1f2328;
+    --accent-blue: #0969da;
+    --accent-green: #1a7f37;
+  }
+
+  :root.dark {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-secondary-rgb: 22, 27, 34;
+    --border-primary: #30363d;
+    --text-primary: #c9d1d9;
+    --accent-blue: #58a6ff;
+    --accent-green: #238636;
+  }
+
+  html,
+  body {
+    @apply h-full m-0 p-0 overflow-hidden cursor-none;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: rgba(var(--bg-secondary-rgb, 255, 255, 255), 0.05);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--border-primary);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-window-pop {
+    animation: windowPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-spin-slow {
+    animation: spin 12s linear infinite;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .collaboration-gradient-border {
+    background: linear-gradient(90deg, transparent, hsla(var(--theme-hue), 100%, 60%, 1), transparent);
+  }
+
+  .collaboration-submit-shadow {
+    box-shadow: 0 20px 40px hsla(var(--theme-hue), 100%, 60%, 0.15);
+  }
+
+  .gradient-border-top {
+    background: linear-gradient(90deg, transparent, hsla(var(--theme-hue), 100%, 60%, 1), transparent);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 20px 40px hsla(var(--theme-hue), 100%, 60%, 0.15);
+  }
+
+  .scan-beam {
+    @apply absolute bottom-0 left-[-100%] w-1/2 h-[1px] pointer-events-none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: input-scan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes input-scan {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes windowPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

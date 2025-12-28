@@ -1,0 +1,2 @@
+components/ProfileCRM.tsx(6,29): error TS2307: Cannot find module '../utils/themeUtils' or its corresponding type declarations.
+components/Sidebar.tsx(183,26): error TS2304: Cannot find name 'profile'.
