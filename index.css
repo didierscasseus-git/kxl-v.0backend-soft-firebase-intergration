@@ -2,6 +2,9 @@
 
 @theme {
   --font-antonio: "Antonio", sans-serif;
+
+  /* Tailwind v4 dark mode configuration */
+  @custom-variant dark (&:where(.dark, .dark *));
 }
 
 @layer base {
