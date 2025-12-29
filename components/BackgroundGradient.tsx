@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { ShaderGradient } from '@shadergradient/react';
 import * as THREE from 'three';
-import { useThemeHue, useTheme } from '../context/ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 
 // Deterministic color sequence mapped to scroll progress
 const COLOR_SEQUENCE = [
@@ -13,15 +13,6 @@ const COLOR_SEQUENCE = [
   { pct: 0.7, c1: "#4E2A4F", c2: "#3A1F3B", c3: "#2D1E2F" },
   { pct: 0.9, c1: "#3A1F3B", c2: "#2D1E2F", c3: "#4E2A4F" },
   { pct: 1.0, c1: "#2D1E2F", c2: "#3A1F3B", c3: "#4E2A4F" },
-];
-
-const LIGHT_COLOR_SEQUENCE = [
-  { pct: 0.0, c1: "#F6F8FA", c2: "#E1E4E8", c3: "#FFFFFF" }, // GitHub Light Gray
-  { pct: 0.2, c1: "#E1E4E8", c2: "#D1D5DA", c3: "#F6F8FA" },
-  { pct: 0.45, c1: "#D1D5DA", c2: "#E1E4E8", c3: "#FFFFFF" },
-  { pct: 0.7, c1: "#F6F8FA", c2: "#E1E4E8", c3: "#D1D5DA" },
-  { pct: 0.9, c1: "#FFFFFF", c2: "#F6F8FA", c3: "#E1E4E8" },
-  { pct: 1.0, c1: "#E1E4E8", c2: "#F6F8FA", c3: "#FFFFFF" },
 ];
 
 const shiftHue = (hex: string, hueShift: number) => {
@@ -44,8 +35,8 @@ const lerpColor = (colorA: string, colorB: string, t: number) => {
   return '#' + c1.getHexString();
 };
 
-const GradientController = ({ scrollY, hueOffset, theme }: { scrollY: number; hueOffset: number; theme: 'light' | 'dark' }) => {
-  const sequence = theme === 'light' ? LIGHT_COLOR_SEQUENCE : COLOR_SEQUENCE;
+const GradientController = ({ scrollY, hueOffset }: { scrollY: number; hueOffset: number }) => {
+  const sequence = COLOR_SEQUENCE;
 
   let activeSet = sequence[0];
   let nextSet = sequence[1];
@@ -85,7 +76,7 @@ const GradientController = ({ scrollY, hueOffset, theme }: { scrollY: number; hu
   return (
     <ShaderGradient
       animate="on"
-      brightness={theme === 'light' ? 0.8 : 1.2}
+      brightness={1.2}
       cAzimuthAngle={180}
       cDistance={3.5}
       cPolarAngle={110}
@@ -102,7 +93,7 @@ const GradientController = ({ scrollY, hueOffset, theme }: { scrollY: number; hu
       range="disabled"
       rangeEnd={40}
       rangeStart={0}
-      reflection={theme === 'light' ? 0.05 : 0.1}
+      reflection={0.1}
       rotationX={0}
       rotationY={rotY}
       rotationZ={rotZ}
@@ -121,8 +112,7 @@ const GradientController = ({ scrollY, hueOffset, theme }: { scrollY: number; hu
 
 const BackgroundGradient: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const { themeHue } = useThemeHue();
-  const { theme } = useTheme();
+  const { themeHue } = useTheme();
 
   useEffect(() => {
     const root = document.getElementById('scroll-root');
@@ -162,7 +152,7 @@ const BackgroundGradient: React.FC = () => {
         }}
         resize={{ debounce: 0, scroll: false }}
       >
-        <GradientController scrollY={scrollProgress} hueOffset={themeHue} theme={theme} />
+        <GradientController scrollY={scrollProgress} hueOffset={themeHue} />
       </Canvas>
     </div>
   );

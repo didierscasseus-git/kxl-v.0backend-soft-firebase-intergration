@@ -1,10 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark';
-
 interface ThemeContextType {
-    theme: Theme;
-    toggleTheme: () => void;
     themeHue: number;
     setThemeHue: (hue: number) => void;
 }
@@ -12,34 +8,18 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [theme, setTheme] = useState<Theme>(() => {
-        const savedTheme = localStorage.getItem('theme') as Theme;
-        return savedTheme || 'dark'; // Default to dark mode to match reference design
-    });
-
     const [themeHue, setThemeHue] = useState<number>(() => {
         const savedHue = localStorage.getItem('themeHue');
         return savedHue ? parseInt(savedHue, 10) : 0;
     });
 
     useEffect(() => {
-        localStorage.setItem('theme', theme);
-        const root = window.document.documentElement;
-        root.classList.remove('light', 'dark');
-        root.classList.add(theme);
-    }, [theme]);
-
-    useEffect(() => {
         localStorage.setItem('themeHue', themeHue.toString());
         document.documentElement.style.setProperty('--theme-hue', themeHue.toString());
     }, [themeHue]);
 
-    const toggleTheme = () => {
-        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-    };
-
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme, themeHue, setThemeHue }}>
+        <ThemeContext.Provider value={{ themeHue, setThemeHue }}>
             {children}
         </ThemeContext.Provider>
     );
@@ -54,11 +34,6 @@ export const useTheme = () => {
     return context;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useThemeHue = () => {
-    const context = useContext(ThemeContext);
-    if (context === undefined) {
-        throw new Error('useThemeHue must be used within a ThemeProvider');
-    }
-    return context;
-};
+// Keep useThemeHue as an alias for backward compatibility if needed, 
+// though useTheme now provides the same thing.
+export const useThemeHue = useTheme;

@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage, useContact, usePage } from '../App';
-import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import HueJoystick from './HueJoystick';
 import ProfileCRM from './ProfileCRM';
@@ -27,7 +26,6 @@ const Sidebar: React.FC = () => {
   const { openHistory } = useContact();
   const { setPage, currentPage } = usePage();
   const { user, logout, profile } = useAuth();
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const scrollRoot = document.getElementById('scroll-root');
@@ -249,14 +247,6 @@ const Sidebar: React.FC = () => {
                 <iconify-icon icon="ph:shield-star-thin" width="24" />
               </button>
             )}
-
-            <button
-              onClick={toggleTheme}
-              className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${theme === 'dark' ? 'text-yellow-400' : 'text-gray-400 hover:text-gray-600'}`}
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              <iconify-icon icon={theme === 'dark' ? "ph:sun-thin" : "ph:moon-thin"} width="22" />
-            </button>
 
             <button onClick={toggleTranslate} title={showTranslate ? "Hide Translator" : "Show Translator"} aria-label={showTranslate ? "Hide Translator" : "Show Translator"} className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${showTranslate ? 'text-brand-accent' : 'text-gray-400 hover:text-white'}`}>
               <iconify-icon icon="ph:globe-simple-thin" width="22" />
