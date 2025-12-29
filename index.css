@@ -8,31 +8,15 @@
 }
 
 @layer base {
-  :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f6f8fa;
-    --bg-secondary-rgb: 246, 248, 250;
-    --border-primary: #d0d7de;
-    --text-primary: #1f2328;
-    --accent-blue: #0969da;
-    --accent-green: #1a7f37;
-  }
 
-  :root.dark {
-    --bg-primary: #0d1117;
-    --bg-secondary: #161b22;
-    --bg-secondary-rgb: 22, 27, 34;
-    --border-primary: #30363d;
-    --text-primary: #c9d1d9;
-    --accent-blue: #58a6ff;
-    --accent-green: #238636;
-  }
-
+  /* Hardcoded reference design - always black background */
   html,
   body {
     @apply h-full m-0 p-0 overflow-hidden cursor-none;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: #0d1117;
+    /* Dark background from reference */
+    color: #c9d1d9;
+    /* Light text */
     transition: background-color 0.3s, color 0.3s;
   }
 }
