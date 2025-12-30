@@ -86,40 +86,30 @@ const Sidebar: React.FC = () => {
         id="nav-root"
         className="fixed left-6 top-6 z-50 flex flex-col items-center"
       >
-        {/* Logo with Dynamic Floating Layers */}
+        {/* Logo with Dynamic Whiteboard Casing */}
         <div className="relative mb-6">
-          {/* Visual Stack Layers - they slide down and expand as the "whiteboard backing" */}
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[clamp(44px,5vw,56px)] rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] -z-10 ${folded ? 'h-full scale-90 translate-y-2 opacity-100' : 'h-[75vh] translate-y-[38vh] opacity-0 pointer-events-none'
-              }`}
-          />
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[clamp(44px,5vw,56px)] rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-700 delay-100 ease-[cubic-bezier(0.34,1.56,0.64,1)] -z-20 ${folded ? 'h-full scale-95 translate-y-1 opacity-100' : 'h-[72vh] translate-y-[36vh] opacity-0 pointer-events-none'
-              }`}
-          />
-
           <button
             onClick={() => setFolded(!folded)}
-            className="w-[clamp(44px,5vw,56px)] h-[clamp(44px,5vw,56px)] glass rounded-2xl flex items-center justify-center font-bold italic text-lg border-white/10 shadow-2xl hover:scale-105 transition-all bg-black/80 text-white z-10"
+            className="w-[clamp(44px,5vw,56px)] h-[clamp(44px,5vw,56px)] glass rounded-2xl flex items-center justify-center font-bold italic text-lg border-white/10 shadow-2xl hover:scale-105 transition-all bg-black/80 text-white z-20 relative"
             aria-label="Toggle Navigation"
           >
             KX
           </button>
 
-          {/* Whiteboard Connector Line */}
+          {/* Master Whiteboard Connector Line */}
           <div
-            className={`absolute left-1/2 -translate-x-1/2 top-full w-[1px] bg-gradient-to-b from-white/40 to-transparent transition-all duration-700 -z-5 ${folded ? 'h-0 opacity-0' : 'h-[70vh] opacity-100'
+            className={`absolute left-1/2 -translate-x-1/2 top-full w-[1px] bg-gradient-to-b from-white/40 to-white/5 transition-all duration-700 -z-5 ${folded ? 'h-0 opacity-0' : 'h-[75vh] opacity-100'
               }`}
             style={{
               transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              transitionDelay: folded ? '0ms' : '200ms'
+              transitionDelay: folded ? '0ms' : '150ms'
             }}
           />
         </div>
 
-        {/* Navigation Stack - Whiteboard Pull-Down Effect */}
+        {/* Navigation Stack - Whiteboard Pull-Down Effect (Segmented) */}
         <div
-          className={`flex flex-col gap-[clamp(8px,1.5vh,16px)] origin-top transition-all ${folded ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-[80vh] opacity-100'}`}
+          className={`flex flex-col gap-[clamp(8px,1.5vh,16px)] origin-top transition-all ${folded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
           style={{
             transitionDuration: '700ms',
             transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
@@ -128,44 +118,67 @@ const Sidebar: React.FC = () => {
           {SECTIONS.map((section, idx) => {
             const isActive = activeIndex === idx;
             const staggerDelay = folded
-              ? (SECTIONS.length - 1 - idx) * 30 // Faster reverse stagger
-              : idx * 45;
+              ? (SECTIONS.length - 1 - idx) * 35
+              : idx * 50;
 
             return (
-              <button
+              <div
                 key={section.id}
-                onClick={() => scrollTo(section.id)}
-                title={t(section.name)}
+                className="relative flex items-center justify-center"
                 style={{
                   transitionDelay: `${staggerDelay}ms`,
-                  transform: folded ? 'translateY(-30px) rotate(-5deg) scale(0.9)' : 'translateY(0) rotate(0) scale(1)',
-                  transitionProperty: 'transform, opacity, background-color, color',
-                  transitionDuration: '600ms',
-                  transitionTimingFunction: 'cubic-bezier(0.34, 1.76, 0.64, 1)' // More bounce
+                  transitionProperty: 'transform, opacity',
+                  transitionDuration: '700ms',
+                  transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  transform: folded ? 'translateY(-100%) scale(0.8)' : 'translateY(0) scale(1)',
+                  opacity: folded ? 0 : 1,
+                  zIndex: SECTIONS.length - idx
                 }}
-                className={`group relative w-[clamp(36px,4vw,48px)] h-[clamp(36px,4vw,48px)] flex items-center justify-center rounded-2xl transition-all ${isActive ? 'bg-white text-black shadow-lg scale-110' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                  } ${folded ? 'opacity-0' : 'opacity-100'}`}
               >
-                <iconify-icon icon={section.icon} width="22" />
-                <span className="absolute left-[calc(100%+12px)] bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white opacity-0 -translate-x-2 pointer-events-none transition-all group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap">
-                  {t(section.name)}
-                </span>
-              </button>
+                {/* Individual Whiteboard Segment - This unrolls from the logo */}
+                <div
+                  className={`absolute inset-0 w-[clamp(44px,5vw,56px)] left-1/2 -translate-x-1/2 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all -z-10 ${folded ? 'scale-75 opacity-0' : 'scale-100 opacity-100'
+                    }`}
+                  style={{
+                    transitionDuration: '800ms',
+                    transitionDelay: `${staggerDelay}ms`,
+                    transitionTimingFunction: 'cubic-bezier(0.34, 1.76, 0.64, 1)' // Higher bounce for the board itself
+                  }}
+                />
+
+                <button
+                  onClick={() => scrollTo(section.id)}
+                  title={t(section.name)}
+                  className={`group relative w-[clamp(36px,4vw,48px)] h-[clamp(36px,4vw,48px)] flex items-center justify-center rounded-2xl transition-all ${isActive ? 'bg-white text-black shadow-lg scale-110' : 'bg-transparent text-gray-400 hover:text-white'
+                    }`}
+                  style={{
+                    transitionDelay: `${staggerDelay + 50}ms`,
+                    transitionDuration: '600ms',
+                    transitionTimingFunction: 'cubic-bezier(0.34, 1.76, 0.64, 1)'
+                  }}
+                >
+                  <iconify-icon icon={section.icon} width="22" />
+                  <span className="absolute left-[calc(100%+24px)] bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white opacity-0 -translate-x-2 pointer-events-none transition-all group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap">
+                    {t(section.name)}
+                  </span>
+                </button>
+              </div>
             );
           })}
 
+
           {/* Auth/User Actions - Continued Stagger */}
           <div
-            className={`mt-4 pt-4 border-t border-white/5 flex flex-col gap-4 items-center transition-all ${folded ? 'opacity-0' : 'opacity-100'}`}
+            className={`mt-4 pt-4 border-t border-white/5 flex flex-col gap-4 items-center transition-all ${folded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             style={{
-              transitionDelay: folded ? '0ms' : `${SECTIONS.length * 45}ms`,
-              transitionDuration: '600ms',
+              transitionDelay: folded ? '0ms' : `${SECTIONS.length * 50}ms`,
+              transitionDuration: '700ms',
               transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              transform: folded ? 'translateY(-30px)' : 'translateY(0)'
+              transform: folded ? 'translateY(-20px)' : 'translateY(0)'
             }}
           >
             {user && (
-              <>
+              <div className="flex flex-col gap-4">
                 <button
                   onClick={() => setCrmOpen(true)}
                   title="Account Hub"
@@ -181,7 +194,7 @@ const Sidebar: React.FC = () => {
                 >
                   <iconify-icon icon="ph:clock-counter-clockwise-thin" width="22" />
                 </button>
-              </>
+              </div>
             )}
 
             <button
@@ -195,12 +208,12 @@ const Sidebar: React.FC = () => {
 
           {/* Hue Controller - Staggered last */}
           <div
-            className={`mt-2 scale-75 origin-top transition-all ${folded ? 'opacity-0' : 'opacity-100'}`}
+            className={`mt-2 scale-75 origin-top transition-all ${folded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             style={{
-              transitionDelay: folded ? '0ms' : `${(SECTIONS.length + 1) * 45}ms`,
-              transitionDuration: '600ms',
+              transitionDelay: folded ? '0ms' : `${(SECTIONS.length + 1) * 50}ms`,
+              transitionDuration: '700ms',
               transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-              transform: folded ? 'translateY(-30px)' : 'translateY(0)'
+              transform: folded ? 'translateY(-20px)' : 'translateY(0)'
             }}
           >
             <HueJoystick />
