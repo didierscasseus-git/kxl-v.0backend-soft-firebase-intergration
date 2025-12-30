@@ -70,7 +70,7 @@ const Hero: React.FC = () => {
       {/* Particles Layer */}
       <div className="absolute inset-0 pointer-events-none select-none z-0">
         {particles.map((p) => (
-           
+
           <div
             key={p.id}
             className="absolute bg-white rounded-full animate-float"
