@@ -1,27 +1,28 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLanguage, useContact, usePage } from '../App';
 import { useAuth } from '../context/AuthContext';
 import HueJoystick from './HueJoystick';
 import ProfileCRM from './ProfileCRM';
+import { useRef } from 'react';
 import '../types';
 
-
+// Refined Vocabulary for Apple/Google style professional-accessibility
 const SECTIONS = [
-  { id: 'hero', name: { en: 'Rebuild', fr: 'Reconstruction' }, color: '#111111', icon: 'ph:rocket-launch-thin' },
-  { id: 'infrastructure', name: { en: 'Engine', fr: 'Moteur' }, color: '#1A1815', icon: 'ph:cpu-thin' },
-  { id: 'services', name: { en: 'Services', fr: 'Services' }, color: '#222222', icon: 'ph:grid-four-thin' },
-  { id: 'capabilities', name: { en: 'Arsenal', fr: 'Arsenal' }, color: '#333333', icon: 'ph:shield-check-thin' },
-  { id: 'approach', name: { en: 'Lifecycle', fr: 'Cycle de vie' }, color: '#444444', icon: 'ph:recycle-thin' },
-  { id: 'cta', name: { en: 'Protocol', fr: 'Protocole' }, color: '#555555', icon: 'ph:lock-key-thin' },
+  { id: 'hero', name: { en: 'Home', fr: 'Accueil' }, icon: 'ph:house-thin' },
+  { id: 'infrastructure', name: { en: 'System Status', fr: 'État du système' }, icon: 'ph:cpu-thin' },
+  { id: 'services', name: { en: 'Services', fr: 'Services' }, icon: 'ph:grid-four-thin' },
+  { id: 'capabilities', name: { en: 'Resources', fr: 'Ressources' }, icon: 'ph:shield-check-thin' },
+  { id: 'approach', name: { en: 'Process', fr: 'Processus' }, icon: 'ph:recycle-thin' },
+  { id: 'cta', name: { en: 'Guidelines', fr: 'Directives' }, icon: 'ph:lock-key-thin' },
 ];
 
 const Sidebar: React.FC = () => {
+  const [folded, setFolded] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showTranslate, setShowTranslate] = useState(false);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
   const [crmOpen, setCrmOpen] = useState(false);
+  const authMenuRef = useRef<HTMLDivElement>(null);
+
   const { t } = useLanguage();
   const { openHistory } = useContact();
   const { setPage, currentPage } = usePage();
@@ -50,245 +51,191 @@ const Sidebar: React.FC = () => {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-
     SECTIONS.forEach((section) => {
       const el = document.getElementById(section.id);
       if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
-  }, [activeIndex, t]);
+  }, [activeIndex]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (authMenuRef.current && !authMenuRef.current.contains(event.target as Node)) {
+        setAuthMenuOpen(false);
+      }
+    };
+    if (authMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [authMenuOpen]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    setMobileMenuOpen(false);
-  };
-
-  const toggleTranslate = () => {
-    setShowTranslate(!showTranslate);
-  };
-
-  const handleAuthNav = (page: 'login' | 'signup') => {
-    setPage(page);
-    setAuthMenuOpen(false);
-    setMobileMenuOpen(false);
   };
 
   return (
     <>
-      <div className={`fixed z-[120] transition-all duration-300 ease-in-out origin-bottom-left bottom-[100px] 
-          xl:left-[60px] xl:translate-x-0
-          left-1/2 -translate-x-1/2
-          ${showTranslate
-          ? 'opacity-100 scale-100 visible xl:translate-y-0 translate-y-0'
-          : 'opacity-0 scale-95 invisible pointer-events-none xl:translate-y-[10px] translate-y-[10px]'
-        }`}
+      <nav
+        id="nav-root"
+        className="fixed left-6 top-6 z-50 flex flex-col items-center"
       >
-        <div className="relative p-1 rounded-2xl glass-dark border border-white/10 shadow-2xl backdrop-blur-2xl">
-          <div className="absolute -top-3 left-4 px-2 py-0.5 bg-brand-accent text-white text-[8px] font-bold uppercase tracking-widest rounded-sm shadow-sm z-20">
-            System Lang
-          </div>
-          <div className="bg-[#F0EEE9]/80 dark:bg-[#0c0c0c]/80 rounded-xl p-3 w-[180px] relative overflow-hidden">
-            <div id="google_translate_element" className="w-full min-h-[30px] flex items-center" />
-            <div className="mt-2 pt-2 border-t border-black/5 dark:border-white/5 flex justify-between items-center text-[8px] text-gray-500 font-mono">
-              <span>AUTO_DETECT</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            </div>
-          </div>
-        </div>
-      </div >
+        {/* Logo with Dynamic Floating Layers */}
+        <div className="relative mb-6">
+          {/* Visual Stack Layers - they slide down and expand as the "whiteboard backing" */}
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[clamp(44px,5vw,56px)] rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] -z-10 ${folded ? 'h-full scale-90 translate-y-2 opacity-100' : 'h-[75vh] translate-y-[38vh] opacity-0 pointer-events-none'
+              }`}
+          />
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[clamp(44px,5vw,56px)] rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-700 delay-100 ease-[cubic-bezier(0.34,1.56,0.64,1)] -z-20 ${folded ? 'h-full scale-95 translate-y-1 opacity-100' : 'h-[72vh] translate-y-[36vh] opacity-0 pointer-events-none'
+              }`}
+          />
 
-      <nav aria-label="Desktop Navigation" className="sticky top-0 h-0 z-[70] hidden xl:block overflow-visible">
-        <div className="absolute left-6 top-[20vh] flex flex-col gap-2">
           <button
-            onClick={() => scrollTo('hero')}
-            title="Scroll to Top"
-            aria-label="Scroll to Top"
-            className="mb-8 w-12 h-12 glass rounded-[20px] flex items-center justify-center font-bold italic text-lg border-white/10 shadow-xl hover:scale-110 transition-transform bg-black/80 text-white"
+            onClick={() => setFolded(!folded)}
+            className="w-[clamp(44px,5vw,56px)] h-[clamp(44px,5vw,56px)] glass rounded-2xl flex items-center justify-center font-bold italic text-lg border-white/10 shadow-2xl hover:scale-105 transition-all bg-black/80 text-white z-10"
+            aria-label="Toggle Navigation"
           >
             KX
           </button>
 
-          <div className="relative flex flex-col gap-2">
-            { }
-            <div
-              className="absolute left-0 w-12 h-12 rounded-[20px] transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) z-0"
-              style={{
-                transform: `translateY(${activeIndex * 56}px)`,
-                backgroundColor: SECTIONS[activeIndex].color,
-                boxShadow: `0 0 30px -5px ${SECTIONS[activeIndex].color}80, inset 0 0 0 1px rgba(255,255,255,0.1)`
-              }}
-            />
-
-
-            {SECTIONS.map((section, idx) => {
-              const isActive = activeIndex === idx;
-              const stepNumber = (idx + 1).toString().padStart(2, '0');
-
-              return (
-                <button
-                  key={section.id}
-                  onClick={() => scrollTo(section.id)}
-                  title={t(section.name)}
-                  aria-label={`Navigate to ${t(section.name)}`}
-                  className={`group relative z-10 flex items-center gap-4 px-2 py-2 rounded-[20px] transition-all duration-500 ease-out outline-none overflow-hidden w-12 hover:w-56 ${isActive ? 'bg-transparent' : 'bg-white/5 hover:bg-white/10'
-                    }`}
-                >
-                  <div className={`w-8 h-8 flex-shrink-0 rounded-xl flex items-center justify-center text-[10px] font-bold tracking-tighter transition-all duration-300 ${isActive ? 'text-white' : 'text-gray-400'
-                    }`}>
-                    {isActive ? <iconify-icon icon={section.icon} width="20" /> : stepNumber}
-                  </div>
-
-                  <div className="flex flex-col text-left transition-all duration-500 overflow-hidden opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 absolute left-14 top-2 bottom-2 right-2 flex justify-center">
-                    <div className="absolute inset-0 bg-black/40 rounded-lg -z-10 backdrop-blur-sm border border-white/5" />
-                    <span className={`text-[11px] font-bold uppercase tracking-[0.2em] whitespace-nowrap pl-2 ${isActive ? 'text-white' : 'text-gray-300'}`}>
-                      {t(section.name)}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="mt-8 flex flex-col items-center gap-6">
-            <div className="relative" onMouseLeave={() => setAuthMenuOpen(false)}>
-              <button
-                onMouseEnter={() => setAuthMenuOpen(true)}
-                title={user ? t({ en: 'User Menu', fr: 'Menu Utilisateur' }) : t({ en: 'Sign In', fr: 'Connexion' })}
-                aria-label={user ? t({ en: 'User Menu', fr: 'Menu Utilisateur' }) : t({ en: 'Sign In', fr: 'Connexion' })}
-                className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${authMenuOpen ? 'text-brand-accent' : 'text-gray-400 hover:text-white'}`}
-              >
-                <iconify-icon icon="ph:user-circle-thin" width="24" />
-              </button>
-              <div className={`absolute left-full bottom-0 ml-4 w-48 glass bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-left ${authMenuOpen ? 'opacity-100 scale-100 translate-x-0 visible' : 'opacity-0 scale-95 -translate-x-2 invisible pointer-events-none'}`}>
-                <div className="p-1 flex flex-col gap-1">
-                  {user ? (
-                    <>
-                      <div className="px-4 py-3 border-b border-white/5 space-y-2">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-brand-accent">
-                          {t({ en: 'Operator Active', fr: 'Opérateur Actif' })}
-                        </p>
-                        <p className="text-[11px] text-white font-medium truncate">
-                          {user.displayName || user.email}
-                        </p>
-                        <div className="flex items-center justify-between gap-2 p-1.5 rounded-lg bg-white/5 border border-white/10 group/id">
-                          <code className="text-[8px] text-white/40 font-mono truncate max-w-[100px]">
-                            ID: {user.uid}
-                          </code>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigator.clipboard.writeText(user.uid);
-                            }}
-                            className="text-brand-accent hover:scale-110 active:scale-95 transition-all p-1"
-                            title={t({ en: 'Copy ID', fr: 'Copier l\'ID' })}
-                          >
-                            <iconify-icon icon="ph:copy-simple-thin" width="12" />
-                          </button>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => {
-                          setCrmOpen(true);
-                          setAuthMenuOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-brand-accent border border-brand-accent/20 bg-brand-accent/5 my-1"
-                      >
-                        <iconify-icon icon="ph:cpu-duotone" width="16" />
-                        {profile?.role === 'DEVELOPER' ? 'SYSTEM_CRM' : 'REQUESTS'}
-                      </button>
-                      <button
-                        onClick={() => {
-                          openHistory();
-                          setAuthMenuOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-gray-200"
-                      >
-                        <iconify-icon icon="ph:clock-counter-clockwise-thin" width="16" />
-                        {t({ en: 'History', fr: 'Historique' })}
-                      </button>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setAuthMenuOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-500/10 transition-colors flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-red-400"
-                      >
-                        <iconify-icon icon="ph:sign-out-thin" width="16" />
-                        {t({ en: 'Disconnect', fr: 'Déconnexion' })}
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button onClick={() => handleAuthNav('login')} className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-gray-200">
-                        <iconify-icon icon="ph:sign-in-thin" width="16" />
-                        {t({ en: 'Log In', fr: 'Connexion' })}
-                      </button>
-                      <button onClick={() => handleAuthNav('signup')} className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-gray-200">
-                        <iconify-icon icon="ph:user-plus-thin" width="16" />
-                        {t({ en: 'Sign Up', fr: 'S\'inscrire' })}
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {(profile?.role === 'PREMIUM_OPERATOR' || profile?.role === 'DEVELOPER') && (
-              <button
-                onClick={() => setPage('premium')}
-                title={t({ en: 'Premium Vault', fr: 'Voûte Premium' })}
-                aria-label={t({ en: 'Premium Vault', fr: 'Voûte Premium' })}
-                className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${currentPage === 'premium' ? 'text-brand-accent bg-brand-accent/10 border-brand-accent' : 'text-gray-400 hover:text-white'}`}
-              >
-                <iconify-icon icon="ph:shield-star-thin" width="24" />
-              </button>
-            )}
-
-            <button onClick={toggleTranslate} title={showTranslate ? "Hide Translator" : "Show Translator"} aria-label={showTranslate ? "Hide Translator" : "Show Translator"} className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all hover:scale-110 active:scale-95 ${showTranslate ? 'text-brand-accent' : 'text-gray-400 hover:text-white'}`}>
-              <iconify-icon icon="ph:globe-simple-thin" width="22" />
-            </button>
-
-            {/* Hue Controller Integration */}
-            <div className="mt-4 pt-4 border-t border-white/5">
-              <HueJoystick />
-            </div>
-          </div>
+          {/* Whiteboard Connector Line */}
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 top-full w-[1px] bg-gradient-to-b from-white/40 to-transparent transition-all duration-700 -z-5 ${folded ? 'h-0 opacity-0' : 'h-[70vh] opacity-100'
+              }`}
+            style={{
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              transitionDelay: folded ? '0ms' : '200ms'
+            }}
+          />
         </div>
-      </nav>
 
-      <div className="fixed bottom-8 right-6 z-[110] xl:hidden flex flex-col items-end gap-4">
-        {/* Mobile Hue Controller Trigger could go here, but for now it's in the mobile menu */}
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} title={mobileMenuOpen ? "Close Menu" : "Open Menu"} aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"} className={`w-14 h-14 rounded-full glass shadow-2xl border-white/10 flex items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'rotate-90 bg-black text-white' : 'bg-white/10 text-white'}`}>
-          <iconify-icon icon={mobileMenuOpen ? "ph:x-thin" : "ph:list-thin"} width="28" />
-        </button>
-      </div>
-
-      <div className={`fixed inset-0 z-[105] xl:hidden transition-all duration-700 ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-xl" onClick={() => setMobileMenuOpen(false)} />
-        <div className={`absolute bottom-28 right-6 w-[260px] flex flex-col gap-2 transition-all duration-500 transform ${mobileMenuOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95 opacity-0'}`}>
-          <div className="mb-4 flex justify-center">
-            <HueJoystick />
-          </div>
+        {/* Navigation Stack - Whiteboard Pull-Down Effect */}
+        <div
+          className={`flex flex-col gap-[clamp(8px,1.5vh,16px)] origin-top transition-all ${folded ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-[80vh] opacity-100'}`}
+          style={{
+            transitionDuration: '700ms',
+            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+          }}
+        >
           {SECTIONS.map((section, idx) => {
             const isActive = activeIndex === idx;
+            const staggerDelay = folded
+              ? (SECTIONS.length - 1 - idx) * 30 // Faster reverse stagger
+              : idx * 45;
+
             return (
               <button
                 key={section.id}
                 onClick={() => scrollTo(section.id)}
-                className={`flex items-center gap-3 p-3 rounded-2xl border transition-all duration-300 ${isActive ? 'bg-white text-black border-white shadow-xl scale-105' : 'bg-black/40 text-gray-300 border-white/5 hover:bg-white/10'
-                  }`}
+                title={t(section.name)}
+                style={{
+                  transitionDelay: `${staggerDelay}ms`,
+                  transform: folded ? 'translateY(-30px) rotate(-5deg) scale(0.9)' : 'translateY(0) rotate(0) scale(1)',
+                  transitionProperty: 'transform, opacity, background-color, color',
+                  transitionDuration: '600ms',
+                  transitionTimingFunction: 'cubic-bezier(0.34, 1.76, 0.64, 1)' // More bounce
+                }}
+                className={`group relative w-[clamp(36px,4vw,48px)] h-[clamp(36px,4vw,48px)] flex items-center justify-center rounded-2xl transition-all ${isActive ? 'bg-white text-black shadow-lg scale-110' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                  } ${folded ? 'opacity-0' : 'opacity-100'}`}
               >
-                <iconify-icon icon={section.icon} width="20" />
-                <span className="text-[11px] font-bold uppercase tracking-widest">{t(section.name)}</span>
+                <iconify-icon icon={section.icon} width="22" />
+                <span className="absolute left-[calc(100%+12px)] bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white opacity-0 -translate-x-2 pointer-events-none transition-all group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap">
+                  {t(section.name)}
+                </span>
               </button>
             );
           })}
+
+          {/* Auth/User Actions - Continued Stagger */}
+          <div
+            className={`mt-4 pt-4 border-t border-white/5 flex flex-col gap-4 items-center transition-all ${folded ? 'opacity-0' : 'opacity-100'}`}
+            style={{
+              transitionDelay: folded ? '0ms' : `${SECTIONS.length * 45}ms`,
+              transitionDuration: '600ms',
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              transform: folded ? 'translateY(-30px)' : 'translateY(0)'
+            }}
+          >
+            {user && (
+              <>
+                <button
+                  onClick={() => setCrmOpen(true)}
+                  title="Account Hub"
+                  className="w-[clamp(36px,4vw,48px)] h-[clamp(36px,4vw,48px)] flex items-center justify-center rounded-2xl bg-brand-accent/20 text-brand-accent border border-brand-accent/30 hover:bg-brand-accent/30 transition-all"
+                >
+                  <iconify-icon icon="ph:cpu-duotone" width="22" />
+                </button>
+                <button
+                  onClick={() => setPage('premium')}
+                  title="Project Timeline"
+                  className={`w-[clamp(36px,4vw,48px)] h-[clamp(36px,4vw,48px)] flex items-center justify-center rounded-2xl transition-all ${currentPage === 'premium' ? 'bg-brand-accent text-white shadow-lg' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                    }`}
+                >
+                  <iconify-icon icon="ph:clock-counter-clockwise-thin" width="22" />
+                </button>
+              </>
+            )}
+
+            <button
+              onClick={() => setAuthMenuOpen(!authMenuOpen)}
+              className={`w-[clamp(36px,4vw,48px)] h-[clamp(36px,4vw,48px)] flex items-center justify-center rounded-2xl transition-all ${authMenuOpen ? 'bg-white text-black' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                }`}
+            >
+              <iconify-icon icon="ph:user-circle-thin" width="22" />
+            </button>
+          </div>
+
+          {/* Hue Controller - Staggered last */}
+          <div
+            className={`mt-2 scale-75 origin-top transition-all ${folded ? 'opacity-0' : 'opacity-100'}`}
+            style={{
+              transitionDelay: folded ? '0ms' : `${(SECTIONS.length + 1) * 45}ms`,
+              transitionDuration: '600ms',
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              transform: folded ? 'translateY(-30px)' : 'translateY(0)'
+            }}
+          >
+            <HueJoystick />
+          </div>
         </div>
-      </div>
+
+        {/* Auth Sub-Menu (Popover style) */}
+        {authMenuOpen && (
+          <div
+            ref={authMenuRef}
+            className="absolute left-[calc(100%+24px)] top-0 w-64 glass animate-window-pop rounded-3xl p-2 border border-white/10 shadow-2xl"
+          >
+            <div className="p-3 border-b border-white/5 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">Session Protocol</p>
+              <p className="text-[12px] text-white font-medium truncate">{user ? (user.displayName || user.email) : 'Guest Access'}</p>
+            </div>
+            <div className="flex flex-col gap-1">
+              {!user ? (
+                <>
+                  <button onClick={() => setPage('login')} className="w-full text-left p-3 rounded-2xl hover:bg-white/5 text-[11px] font-bold uppercase tracking-widest text-white flex items-center gap-3">
+                    <iconify-icon icon="ph:sign-in-thin" width="18" /> Log In
+                  </button>
+                  <button onClick={() => setPage('signup')} className="w-full text-left p-3 rounded-2xl hover:bg-white/5 text-[11px] font-bold uppercase tracking-widest text-white flex items-center gap-3">
+                    <iconify-icon icon="ph:user-plus-thin" width="18" /> Sign Up
+                  </button>
+                </>
+              ) : (
+                <button onClick={logout} className="w-full text-left p-3 rounded-2xl hover:bg-red-500/10 text-[11px] font-bold uppercase tracking-widest text-red-500 flex items-center gap-3">
+                  <iconify-icon icon="ph:sign-out-thin" width="18" /> Disconnect
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
 
       <ProfileCRM isOpen={crmOpen} onClose={() => setCrmOpen(false)} />
     </>

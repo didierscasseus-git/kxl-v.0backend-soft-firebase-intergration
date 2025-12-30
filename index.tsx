@@ -6,6 +6,8 @@ import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 
+import { ThemeModeProvider } from './context/ThemeModeContext';
+
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error("Could not find root element");
 
@@ -14,7 +16,9 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <ThemeProvider>
-        <App />
+        <ThemeModeProvider>
+          <App />
+        </ThemeModeProvider>
       </ThemeProvider>
     </AuthProvider>
   </React.StrictMode>

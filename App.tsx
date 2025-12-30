@@ -5,7 +5,8 @@ import Sidebar from './components/Sidebar';
 import Hero from './sections/Hero';
 import Flashlight from './components/Flashlight';
 import CustomCursor from './components/CustomCursor';
-import BackgroundGradient from './components/BackgroundGradient';
+import BackgroundBase from './components/background/BackgroundBase';
+import BackgroundGradient from './components/background/BackgroundGradient';
 import ContactModal from './components/ContactModal';
 import HistoryModal from './components/HistoryModal';
 import Login from './pages/Login';
@@ -97,6 +98,19 @@ const App: React.FC = () => {
   }, [user, currentPage]);
 
   useEffect(() => {
+    const handleResize = () => {
+      const vh = window.innerHeight * 0.01;
+      const vw = window.innerWidth * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty('--vw', `${vw}px`);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     const scrollRoot = scrollRootRef.current;
     if (!scrollRoot) return;
 
@@ -142,10 +156,12 @@ const App: React.FC = () => {
             <div
               id="scroll-root"
               ref={scrollRootRef}
-              className="relative font-antonio selection:bg-brand-accent/30 selection:text-brand-accent bg-transparent transition-colors duration-500 h-screen overflow-y-auto overflow-x-hidden scrollbar-hide"
+              className={`relative font-antonio selection:bg-brand-accent/30 selection:text-brand-accent bg-transparent transition-colors duration-500 min-h-screen h-[calc(var(--vh,1vh)*100)] overflow-y-auto overflow-x-hidden scrollbar-hide ${user ? 'is-authenticated' : ''}`}
             >
-              <CustomCursor />
+
+              <BackgroundBase />
               <BackgroundGradient />
+              <CustomCursor />
               <Flashlight />
 
               {currentPage === 'home' && <Sidebar />}

@@ -34,7 +34,7 @@ const Services: React.FC = () => {
                         {t({ en: 'Service Layer', fr: 'Couche de Service' })}
                     </span>
                     <h2 className="text-4xl md:text-6xl font-light tracking-tighter uppercase text-apple-shade font-sans">
-                        {t({ en: 'REBUILD ', fr: 'MATRICE ' })} <span className="italic">{t({ en: 'MATRIX', fr: 'DE RECONSTRUCTION' })}</span>
+                        {t({ en: 'SOLUTION ', fr: 'MATRICE ' })} <span className="italic">{t({ en: 'FRAMEWORK', fr: 'DE SOLUTIONS' })}</span>
                     </h2>
                 </div>
                 <p className="glass-panel text-sm md:text-base max-w-xl leading-relaxed font-sans">
@@ -131,7 +131,8 @@ const Services: React.FC = () => {
                                     }}
                                     className="mt-8 px-8 py-3 rounded-full border border-white/20 hover:bg-white hover:text-black transition-all duration-300 text-[10px] font-bold uppercase tracking-widest animate-fade-in delay-200 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] font-sans"
                                 >
-                                    {t({ en: 'Deploy Logic', fr: 'Déployer Logique' })}
+                                    {t({ en: 'Initialize Solution', fr: 'Initialiser Solution' })}
+
                                 </button>
 
                             </div>

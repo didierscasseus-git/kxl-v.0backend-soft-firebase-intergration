@@ -30,7 +30,7 @@ const TechStack: React.FC = () => {
               {t({ en: 'The Technology Layer', fr: 'La Couche Technologique' })}
             </span>
             <h2 className="text-5xl md:text-7xl font-light tracking-tighter uppercase text-apple-shade font-sans">
-              {t({ en: 'ENGINEERING ', fr: 'NOTRE ' })} <span className="italic font-bold">{t({ en: 'ARSENAL', fr: 'ARSENAL' })}</span>
+              {t({ en: 'SYSTEM ', fr: 'NOTRE ' })} <span className="italic font-bold">{t({ en: 'ARCHITECTURE', fr: 'ARCHITECTURE' })}</span>
             </h2>
           </div>
           <p className="glass-panel text-lg !p-10 !bg-white/[0.03] border-white/5 leading-relaxed font-light font-sans max-w-2xl">

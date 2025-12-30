@@ -2,6 +2,8 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useLanguage } from '../App';
 import { useThemeHue } from '../context/ThemeContext';
+import { useThemeMode } from '../context/ThemeModeContext';
+
 import { Canvas } from '@react-three/fiber';
 import { ShaderGradient } from '@shadergradient/react';
 import * as THREE from 'three';
@@ -77,6 +79,7 @@ const HologramOrb: React.FC<{ hue: number }> = ({ hue }) => {
 const HueJoystick: React.FC = () => {
   const { themeHue, setThemeHue } = useThemeHue();
   const { t } = useLanguage();
+  const { toggleMode } = useThemeMode();
 
   const [draftHue, setDraftHue] = useState(themeHue);
   const [isDrafting, setIsDrafting] = useState(false);
@@ -258,9 +261,11 @@ const HueJoystick: React.FC = () => {
             onTouchStart={handleDragStart}
             onClick={() => {
               if (!isDragging && Date.now() - lastInteractionTime.current > 500) {
+                toggleMode();
                 handleRandom();
               }
             }}
+
             className={`w-11 h-11 rounded-full shadow-2xl flex items-center justify-center cursor-grab active:cursor-grabbing transition-all duration-300 relative z-20 overflow-hidden ${isDragging ? 'scale-90 shadow-none' : 'hover:scale-105 shadow-[0_15px_30px_rgba(0,0,0,0.8)]'}`}
             style={{
               transform: `translate(${joystickPos.x}px, ${joystickPos.y}px)`,

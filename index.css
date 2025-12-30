@@ -13,16 +13,19 @@
     --text-primary: #c9d1d9;
     --accent-blue: #58a6ff;
     --accent-green: #238636;
+    --vh: 1vh;
+    --vw: 1vw;
   }
 
-  /* Hardcoded reference design - always black background */
   html,
   body {
     @apply h-full m-0 p-0 overflow-hidden cursor-none;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     transition: background-color 0.3s, color 0.3s;
+    height: calc(var(--vh, 1vh) * 100);
   }
+
 }
 
 @layer utilities {
@@ -42,6 +45,17 @@
   .animate-spin-slow {
     animation: spin 12s linear infinite;
   }
+
+  .is-authenticated {
+    filter: grayscale(1) contrast(1.1);
+    transition: filter 1s ease-in-out;
+  }
+
+  .is-authenticated .glass {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
 
   /* Hide scrollbar for Chrome, Safari and Opera */
   .scrollbar-hide::-webkit-scrollbar {

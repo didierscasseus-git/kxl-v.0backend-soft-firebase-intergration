@@ -31,8 +31,8 @@ const Hero: React.FC = () => {
     }));
   }, []);
 
-  const titleLine1 = t({ en: 'CREATIVITY', fr: 'CRÉATIVITÉ' });
-  const titleLine2 = t({ en: 'ENGINEERED TO SCALE', fr: 'CONÇUE POUR L\'ÉCHELLE' });
+  const titleLine1 = t({ en: 'DESIGN', fr: 'DESIGN' });
+  const titleLine2 = t({ en: 'ENGINEERED FOR SCALE', fr: 'CONÇU POUR L\'ÉCHELLE' });
 
   useEffect(() => {
     const scrollRoot = document.getElementById('scroll-root');
@@ -139,8 +139,8 @@ const Hero: React.FC = () => {
           <div className="space-y-8 flex-1">
             <div className="glass-panel text-lg md:text-2xl leading-relaxed font-light font-sans text-left tracking-wide !bg-white/10 !backdrop-blur-[40px] border-white/20">
               {t({
-                en: 'Reimagine your brand and let it reach its full potential. High-performance digital ecosystems that power your ultimate ambitions.',
-                fr: 'Réimaginez votre marque et laissez-la atteindre son plein potentiel. Des écosystèmes numériques haute performance qui propulsent vos ambitions.'
+                en: 'High-performance digital ecosystems that power your most ambitious objectives. Precise. Scalable. Invisible.',
+                fr: 'Des écosystèmes numériques haute performance qui propulsent vos objectifs les plus ambitieux. Précis. Évolutifs. Invisibles.'
               })}
             </div>
 
@@ -157,7 +157,8 @@ const Hero: React.FC = () => {
                 onClick={() => setPage('casestudies')}
                 className="w-full sm:w-auto glass px-12 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[14px] hover:scale-105 active:scale-95 transition-all duration-500 hover:bg-white/10 text-white border border-white/20"
               >
-                {t({ en: 'View Case Files', fr: 'Dossiers de Cas' })}
+                {t({ en: 'Explore Case Files', fr: 'Explorer les Cas' })}
+
               </button>
             </div>
           </div>
