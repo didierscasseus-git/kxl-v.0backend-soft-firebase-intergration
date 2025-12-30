@@ -181,10 +181,10 @@ const App: React.FC = () => {
               </main>
 
               {currentPage === 'home' && (
-                <footer className="py-20 border-t border-black/5 dark:border-white/5 bg-brand-dancer/20 dark:bg-black/20 px-[5%] relative z-10">
+                <footer className="py-20 border-t border-white/5 bg-black/20 px-[5%] relative z-10">
                   <div className="flex flex-col md:flex-row justify-between items-center gap-12">
                     <div className="space-y-4">
-                      <div className="text-2xl font-bold tracking-tighter uppercase italic text-gray-900 dark:text-gray-100 font-sans">Kaza X Labs</div>
+                      <div className="text-2xl font-bold tracking-tighter uppercase italic text-gray-100 font-sans">Kaza X Labs</div>
                       <p className="text-[12px] text-apple-simple max-w-xs leading-relaxed font-sans">
                         {t({
                           en: "Deterministic digital lab focused on architectural upgrades and high-performance brand ecosystems.",
@@ -193,14 +193,14 @@ const App: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="text-[14px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-bold font-sans">
+                    <div className="text-[14px] text-gray-400 uppercase tracking-widest font-bold font-sans">
                       © 2024 Kaza X — REBUILD_ENGINE_v4.0.1
                     </div>
 
                     <div className="flex gap-8">
-                      <a href="#" aria-label="Twitter X" className="text-gray-700 dark:text-gray-300 hover:text-brand-accent transition-all hover:scale-110 focus:ring-2 focus:ring-brand-accent outline-none rounded-lg"><iconify-icon icon="line-md:twitter-x" width="24" /></a>
-                      <a href="#" aria-label="LinkedIn" className="text-gray-700 dark:text-gray-300 hover:text-brand-accent transition-all hover:scale-110 focus:ring-2 focus:ring-brand-accent outline-none rounded-lg"><iconify-icon icon="line-md:linkedin" width="24" /></a>
-                      <a href="#" aria-label="GitHub" className="text-gray-700 dark:text-gray-300 hover:text-brand-accent transition-all hover:scale-110 focus:ring-2 focus:ring-brand-accent outline-none rounded-lg"><iconify-icon icon="line-md:github" width="24" /></a>
+                      <a href="#" aria-label="Twitter X" className="text-gray-300 hover:text-brand-accent transition-all hover:scale-110 focus:ring-2 focus:ring-brand-accent outline-none rounded-lg"><iconify-icon icon="line-md:twitter-x" width="24" /></a>
+                      <a href="#" aria-label="LinkedIn" className="text-gray-300 hover:text-brand-accent transition-all hover:scale-110 focus:ring-2 focus:ring-brand-accent outline-none rounded-lg"><iconify-icon icon="line-md:linkedin" width="24" /></a>
+                      <a href="#" aria-label="GitHub" className="text-gray-300 hover:text-brand-accent transition-all hover:scale-110 focus:ring-2 focus:ring-brand-accent outline-none rounded-lg"><iconify-icon icon="line-md:github" width="24" /></a>
                     </div>
                   </div>
                 </footer>

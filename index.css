@@ -6,16 +6,6 @@
 
 @layer base {
   :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f6f8fa;
-    --bg-secondary-rgb: 246, 248, 250;
-    --border-primary: #d0d7de;
-    --text-primary: #1f2328;
-    --accent-blue: #0969da;
-    --accent-green: #1a7f37;
-  }
-
-  :root.dark {
     --bg-primary: #0d1117;
     --bg-secondary: #161b22;
     --bg-secondary-rgb: 22, 27, 34;
@@ -25,6 +15,7 @@
     --accent-green: #238636;
   }
 
+  /* Hardcoded reference design - always black background */
   html,
   body {
     @apply h-full m-0 p-0 overflow-hidden cursor-none;
